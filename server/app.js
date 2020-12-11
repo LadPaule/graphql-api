@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-mongoose.connect('mongodb+srv://paul:test1234@cluster0.kanpf.mongodb.net/test', {
+mongoose.connect('mongodb://localhost/gql-api', {
     useUnifiedTopology: true, 
     useNewUrlParser: true, 
     useCreateIndex: true

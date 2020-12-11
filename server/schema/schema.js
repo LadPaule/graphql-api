@@ -1,7 +1,7 @@
 const graphq = require('graphql');
 const Product = require('../modals/product');
 const Farm = require('../modals/farm');
-const farm = require('../modals/farm');
+
 
 const { GraphQLObjectType, 
     GraphQLString, 
@@ -15,8 +15,8 @@ const ProductType = new GraphQLObjectType({
     name: 'Product',
     fields: () =>({
         id: {type: GraphQLID},
-        name: {type: GraphQLString},
-        category: {type: GraphQLString},
+        name: {type: GraphQLNonNull(GraphQLString)},
+        category: {type:  GraphQLNonNull(GraphQLString)},
         description: {type: GraphQLString},
         varriants: {type: GraphQLString},
         farm: {
@@ -33,7 +33,7 @@ const FarmType = new GraphQLObjectType({
     name: 'Farm',
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLString},
+        name: {type: GraphQLNonNull(GraphQLString)},
         description: {type: GraphQLString},
         address: {type:GraphQLString},
         products: {
