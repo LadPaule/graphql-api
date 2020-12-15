@@ -34,6 +34,7 @@ const FarmType = new GraphQLObjectType({
     fields: () => ({
         id: {type: GraphQLID},
         name: {type: GraphQLNonNull(GraphQLString)},
+        category:{ type: GraphQLNonNull(GraphQLString) },
         description: {type: GraphQLString},
         address: {type:GraphQLString},
         products: {
@@ -57,6 +58,27 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args){
                 //retrieving a product from the database
                 return Product.findById(args.id);
+            }
+        },
+        //updating a farm record
+        update_farm: {
+            type: FarmType,
+            args: {
+                id: {type: GraphQLID}
+            },
+            resolve(parent, args){
+                return Farm.findByIdAndUpdate(args.id);
+            }
+        },
+       //Deleting  a farm record
+        delete_farm: {
+            type: FarmType,
+            args: {
+                id: {type: GraphQLID},
+                message: {type: GraphQLString}
+            },
+            resolve(parent, args){
+                return Farm.findByIdAndDelete(args.id);
             }
         },
         farm:{
@@ -90,13 +112,13 @@ const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
         add_farm:{type: FarmType,
-            args: { name : {type: new GraphQLNonNull(GraphQLString) 
+            args: { name : {type: GraphQLNonNull(GraphQLString) 
                 },
-                category:{ type: new GraphQLNonNull(GraphQLString) 
+                category:{ type: GraphQLNonNull(GraphQLString) 
                 },
                 description:{type: GraphQLString
                 },
-                address:{ type: new GraphQLNonNull(GraphQLString) 
+                address:{ type: GraphQLNonNull(GraphQLString) 
                 }
             },
             
@@ -110,11 +132,42 @@ const Mutation = new GraphQLObjectType({
                 return farm.save()
             }
         },
+        update_farm:{type: FarmType,
+            args: {
+                 id: {type:GraphQLNonNull(GraphQLID) },
+                name : {type: GraphQLString },
+                category:{ type: GraphQLString },
+                description:{type: GraphQLString },
+                address:{ type: GraphQLString }
+            },
+            
+            resolve(parent, args){
+                let farm = new Farm({
+                    name: args.name,
+                    category: args.category,
+                    description: args.description,
+                    address: args.varriants
+                });
+                var id = args.id
+                return farm.save()
+            }
+        },
+        delete_farm:{
+            type: FarmType,
+            args:{
+                id:{type: GraphQLID}
+                
+            },
+            resolve(parent, args){
+                return "Farm has been deleted successfully!"
+            }
+        },
+
         add_product: {
             type: ProductType,
             args: {
-                name: {type: new GraphQLNonNull(GraphQLString) },
-                category: {type: new GraphQLNonNull(GraphQLString) },
+                name: {type: GraphQLNonNull(GraphQLString) },
+                category: {type: GraphQLNonNull(GraphQLString) },
                 description: {type: GraphQLString},
                 varriants: {type: GraphQLString},
                 farmId: {type: GraphQLID}
